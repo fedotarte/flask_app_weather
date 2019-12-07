@@ -1,10 +1,9 @@
 import json
 
-from flask import Flask
+from flask import Flask, Response
 from flask import request
 import configparser
 from model import location, weather
-
 
 app = Flask(__name__)
 key = '3a6c4c95fb32d6ac9c128b1fe693cbad'
@@ -65,7 +64,7 @@ def get_weather():
     longitude = request.args.get('longitude')
     latitude = request.args.get('latitude')
     if longitude is None or latitude is None:
-        req_loc = location.RequestLocation("http://api.ipstack.com/check?", access_key=loc_key)
+        req_loc = location.RequestLocation("http://api.ipstack.com/check?", access_key="7761abaed364fdc2bb47d511bfdd9a3f")
         req_loc.get_geo_url()
         location_data = req_loc.get_location_data()
         print(location_data.__str__())
@@ -73,10 +72,15 @@ def get_weather():
         print("global lat is: ", latitude)
         longitude = str(location_data.get_lon())
         print("global lat is: ", longitude)
-    cur_weather = weather.DataForWeatherApi(latitude, longitude, appid)
+    cur_weather = weather.DataForWeatherApi(lat=latitude, lon=longitude, appid='3a6c4c95fb32d6ac9c128b1fe693cbad')
     cur_weather.get_current_weather_uri()
     weather_data = cur_weather.get_weather_data()
-    return json.dumps(vars(weather_data))
+    resp_json = json.dumps(vars(weather_data))
+    print(resp_json)
+    resp = Response(response=resp_json,
+                    status=200,
+                    mimetype="application/json")
+    return resp
 
 
 if __name__ == '__main__':

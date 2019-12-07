@@ -21,7 +21,7 @@ class DataForWeatherApi:
     def __init__(self, lat, lon, appid):
         self.lat = lat
         self.lon = lon
-        self.appid=appid
+        self.appid = appid
         self.f_url = ""
         print("weather with: ", self.lat, self.lon)
         pass
@@ -38,8 +38,8 @@ class DataForWeatherApi:
             'lon': '-0.118092'
         }
         if self.lat.__len__() > 0 and \
-           self.lat.__len__() > 0 and \
-            self.appid.__len__() > 0:
+                self.lat.__len__() > 0 and \
+                self.appid.__len__() > 0:
             print("asserted")
             params['lat'] = self.lat
             print("changed 1")
