@@ -6,22 +6,27 @@ import configparser
 from model import location, weather
 
 app = Flask(__name__)
-key = '3a6c4c95fb32d6ac9c128b1fe693cbad'
-appid = ""
-loc_key = ""
-parser = configparser.ConfigParser()
-parser.read('config.ini')
-for sect in parser.sections():
-    print('Section: %s' % sect)
-    for k, v in parser.items(sect):
-        print(' {} = {}'.format(k, v))
-        if k == 'locationkey':
-            loc_key = v
-        elif k == 'accesskey':
-            appid = v
-        else:
-            print("nothing found")
 
+
+def read_config():
+    key = '3a6c4c95fb32d6ac9c128b1fe693cbad'
+    appid = ""
+    loc_key = ""
+    parser = configparser.ConfigParser()
+    try:
+        parser.read('config.ini')
+        for sect in parser.sections():
+            print('Section: %s' % sect)
+            for k, v in parser.items(sect):
+                print(' {} = {}'.format(k, v))
+                if k == 'locationkey':
+                    loc_key = v
+                elif k == 'accesskey':
+                    appid = v
+                else:
+                    print("nothing found")
+    except OSError as e:
+        print(e)
 
 
 @app.route('/')
@@ -61,7 +66,8 @@ def get_weather():
     longitude = request.args.get('longitude')
     latitude = request.args.get('latitude')
     if longitude is None or latitude is None:
-        req_loc = location.RequestLocation("http://api.ipstack.com/check?", access_key="7761abaed364fdc2bb47d511bfdd9a3f")
+        req_loc = location.RequestLocation("http://api.ipstack.com/check?",
+                                           access_key="7761abaed364fdc2bb47d511bfdd9a3f")
         req_loc.get_geo_url()
         location_data = req_loc.get_location_data()
         print(location_data.__str__())
