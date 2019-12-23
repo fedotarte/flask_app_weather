@@ -12,18 +12,16 @@ loc_key = ""
 parser = configparser.ConfigParser()
 parser.read('config.ini')
 for sect in parser.sections():
-    print('Section: ', sect)
+    print('Section: %s' % sect)
     for k, v in parser.items(sect):
         print(' {} = {}'.format(k, v))
         if k == 'locationkey':
-            print("location", v)
             loc_key = v
         elif k == 'accesskey':
-            print("weather", v)
             appid = v
         else:
             print("nothing found")
-    print()
+
 
 
 @app.route('/')
@@ -39,9 +37,8 @@ def get_ip_geo():
     print(location_data.__str__())
     latitude = str(location_data.get_lat())
     print("global lat is: ", latitude)
-    longtitude = str(location_data.get_lon())
-    print("global lat is: ", longtitude)
-    return "i got the coords" + str(latitude) + str(longtitude)
+    longitude = str(location_data.get_lon())
+    return "i got the coords" + str(latitude) + str(longitude)
 
 
 # @app.route('get_geo_by_coordinates', methods=['GET'])
@@ -69,9 +66,9 @@ def get_weather():
         location_data = req_loc.get_location_data()
         print(location_data.__str__())
         latitude = str(location_data.get_lat())
-        print("global lat is: ", latitude)
+        print("global lat is: %s" % latitude)
         longitude = str(location_data.get_lon())
-        print("global lat is: ", longitude)
+        print("global lon is: %s" % longitude)
     cur_weather = weather.DataForWeatherApi(lat=latitude, lon=longitude, appid='3a6c4c95fb32d6ac9c128b1fe693cbad')
     cur_weather.get_current_weather_uri()
     weather_data = cur_weather.get_weather_data()
