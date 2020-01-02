@@ -2,10 +2,12 @@ import json
 
 from flask import Flask, Response
 from flask import request
+from flask import current_app as config_app
 import configparser
 from model import location, weather
 
 app = Flask(__name__)
+print(config_app.config['INFO'])
 
 
 def read_config():
@@ -75,7 +77,9 @@ def get_weather():
         print("global lat is: %s" % latitude)
         longitude = str(location_data.get_lon())
         print("global lon is: %s" % longitude)
-    cur_weather = weather.DataForWeatherApi(lat=latitude, lon=longitude, appid='3a6c4c95fb32d6ac9c128b1fe693cbad')
+    cur_weather = weather.DataForWeatherApi(lat=latitude,
+                                            lon=longitude,
+                                            appid='3a6c4c95fb32d6ac9c128b1fe693cbad')
     cur_weather.get_current_weather_uri()
     weather_data = cur_weather.get_weather_data()
     resp_json = json.dumps(vars(weather_data))
